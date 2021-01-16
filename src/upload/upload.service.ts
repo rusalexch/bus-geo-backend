@@ -1,3 +1,4 @@
+import { BusService } from './../bus/bus.service';
 import { GPSPointDto } from './dto/gps.point.dto';
 import { BusDto } from './../bus/dto/bus.dto';
 import { IGPSPoint } from './interfaces/gps-point.interface';
@@ -11,12 +12,17 @@ import { AvailableMimetypes } from 'src/common/enum/available-mimetypes.enum';
 import { ResponseStatus } from 'src/common/enum/response-status.enum';
 import { messages } from 'src/common/messages';
 import { UploadFileDto } from './dto/upload-file.dto';
+import { PointService } from 'src/points/point.service';
 
 export type Test = { buses: BusDto[]; points: GPSPointDto[] };
 
 @Injectable()
 export class UploadService {
-  constructor(private csvService: CsvService) {}
+  constructor(
+    private csvService: CsvService,
+    private busService: BusService,
+    private pointService: PointService,
+  ) {}
 
   async uploadFile(file: UploadFileDto): Promise<BaseResponseDto<string>> {
     return new Promise(async (resolve) => {
@@ -61,13 +67,22 @@ export class UploadService {
         (error: Error) => {
           console.error(error);
         },
-        () => {
+        async () => {
           response.status = ResponseStatus.ok;
           response.result = messages.info.upload.uploadCompleted;
-          console.log({
-            buses,
-            points,
+          const busIds = await this.busService.addBuses(buses);
+          console.log(busIds);
+          const pointEntities = points.map((point) => {
+            const index = buses.findIndex((bus) => {
+              return bus.ident === point.bus.ident;
+            });
+            point.bus.id = busIds[index];
+            return point;
           });
+          while (pointEntities.length) {
+            console.log(pointEntities.length);
+            await this.pointService.addPoints(pointEntities.splice(0, 1000));
+          }
           this.deleteFile(file.filePath);
           resolve(response);
         },

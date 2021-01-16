@@ -7,4 +7,8 @@ export class Bus {
 
   @Column({ unique: true, type: 'varchar' })
   ident: string;
+
+  constructor(options: Partial<Bus>) {
+    Object.assign(this, options);
+  }
 }

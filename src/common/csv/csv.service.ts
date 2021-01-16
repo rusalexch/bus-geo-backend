@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { parseFile } from 'fast-csv';
+import { parseFile, writeToPath } from 'fast-csv';
 import { Observable } from 'rxjs';
 
 @Injectable()
@@ -19,5 +19,9 @@ export class CsvService {
         .on('error', (err) => observer.error(err))
         .on('end', () => observer.complete());
     });
+  }
+
+  save(path: string, rows: string[][]) {
+
   }
 }

@@ -33,4 +33,8 @@ export class Point {
   @ManyToOne(() => Bus)
   @JoinColumn({ name: 'bus_id' })
   bus: Bus;
+
+  constructor(options: Partial<Point>) {
+    Object.assign(this, options);
+  }
 }
