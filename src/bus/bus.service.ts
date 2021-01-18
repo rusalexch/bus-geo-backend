@@ -13,4 +13,8 @@ export class BusService {
       await this.busRepository.insert(busEntities)
     ).identifiers.map<number>((item) => item.id);
   }
+
+  async list() {
+    return this.busRepository.findAndCount();
+  }
 }

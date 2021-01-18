@@ -4,6 +4,9 @@ import { setupSwagger } from './core/swagger/setup-swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.enableCors({
+    preflightContinue: true,
+  });
 
   setupSwagger(app);
 

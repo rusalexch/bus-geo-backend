@@ -1,3 +1,4 @@
+import { PointsController } from './../points/points.controller';
 import { PointModule } from './../points/point.module';
 import { BusModule } from './../bus/bus.module';
 import { CsvModule } from './../common/csv/csv.module';
@@ -14,7 +15,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     UploadModule,
     TypeOrmModule.forRoot(),
   ],
-  controllers: [AppController],
+  controllers: [PointsController, AppController],
   providers: [],
 })
 export class AppModule {}

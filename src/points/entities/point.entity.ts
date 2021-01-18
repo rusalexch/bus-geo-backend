@@ -34,6 +34,9 @@ export class Point {
   @JoinColumn({ name: 'bus_id' })
   bus: Bus;
 
+  @Column({ name: 'bus_id' })
+  busId: number;
+
   constructor(options: Partial<Point>) {
     Object.assign(this, options);
   }
